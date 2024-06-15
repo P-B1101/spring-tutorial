@@ -24,35 +24,35 @@ public class PropertyServiceImpl implements PropertyService {
 
     @Override
     public PropertyDTO saveProperty(PropertyDTO property) {
-        PropertyEntity result = propertyRepository.save(propertyConverter.convertDtoToEntity(property));
-        return propertyConverter.convertEntityToDto(result);
+        final PropertyEntity result = propertyRepository.save(propertyConverter.convert(property));
+        return propertyConverter.convert(result);
     }
 
     @Override
     public List<PropertyDTO> getAll() {
-        List<PropertyEntity> result = (List<PropertyEntity>) propertyRepository.findAll();
-        List<PropertyDTO> dtoList = new ArrayList<>();
+        final List<PropertyEntity> result = (List<PropertyEntity>) propertyRepository.findAll();
+        final List<PropertyDTO> dtoList = new ArrayList<>();
         for (PropertyEntity entity : result) {
-            dtoList.add(propertyConverter.convertEntityToDto(entity));
+            dtoList.add(propertyConverter.convert(entity));
         }
         return dtoList;
     }
 
     @Override
     public PropertyDTO fullUpdateProperty(String id, PropertyDTO property) throws NotFoundException {
-        Optional<PropertyEntity> optionalProperty = propertyRepository.findById(id);
+        final Optional<PropertyEntity> optionalProperty = propertyRepository.findById(id);
         if (!optionalProperty.isPresent()) {
             throw new NotFoundException();
         }
-        PropertyEntity pe = propertyConverter.convertDtoToEntity(property);
+        PropertyEntity pe = propertyConverter.convert(property);
         pe.setId(id);
         pe = propertyRepository.save(pe);
-        return propertyConverter.convertEntityToDto(pe);
+        return propertyConverter.convert(pe);
     }
 
     @Override
     public PropertyDTO partialUpdateProperty(String id, PropertyDTO property) throws NotFoundException {
-        Optional<PropertyEntity> optionalProperty = propertyRepository.findById(id);
+        final Optional<PropertyEntity> optionalProperty = propertyRepository.findById(id);
         if (!optionalProperty.isPresent()) {
             throw new NotFoundException();
         }
@@ -64,14 +64,10 @@ public class PropertyServiceImpl implements PropertyService {
             pe.setAddress(property.getAddress());
         if (property.getDescription() != null)
             pe.setDescription(property.getDescription());
-        if (property.getOwnerEmail() != null)
-            pe.setOwnerEmail(property.getOwnerEmail());
-        if (property.getOwnerName() != null)
-            pe.setOwnerName(property.getOwnerName());
         if (property.getPrice() != null)
             pe.setPrice(property.getPrice());
         pe = propertyRepository.save(pe);
-        return propertyConverter.convertEntityToDto(pe);
+        return propertyConverter.convert(pe);
     }
 
     @Override
