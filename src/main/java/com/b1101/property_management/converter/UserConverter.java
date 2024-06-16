@@ -23,9 +23,9 @@ public class UserConverter {
         dto.setId(entity.getId());
         dto.setEmail(entity.getEmail());
         dto.setName(entity.getName());
-        dto.setPassword(entity.getPassword());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setUsername(entity.getUsername());
         return dto;
     }
+
 }

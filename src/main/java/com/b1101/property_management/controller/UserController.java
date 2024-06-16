@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.b1101.property_management.exceptions.InvalidUsernameOrPasswordException;
 import com.b1101.property_management.exceptions.UserAlreadyExistException;
+import com.b1101.property_management.model.LoginDto;
 import com.b1101.property_management.model.UserDto;
 import com.b1101.property_management.service.UserService;
 
@@ -37,7 +39,21 @@ public class UserController {
             return new ResponseEntity<Object>(response, HttpStatus.OK);
         } catch (UserAlreadyExistException e) {
             final UserAlreadyExistException.UserAlreadyExistExceptionMessage error = new UserAlreadyExistException.UserAlreadyExistExceptionMessage();
-            error.setMessage("User with usernam " + user.getUsername() + " is already exists");
+            error.setMessage("User with username " + user.getUsername() + " is already exists");
+            return new ResponseEntity<Object>(error, HttpStatus.UNAUTHORIZED);
+        }
+
+    }
+
+    @PostMapping("/login")
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<Object> login(@RequestBody LoginDto login) {
+        try {
+            final UserDto response = userService.login(login.getUsername(), login.getPassword());
+            return new ResponseEntity<Object>(response, HttpStatus.OK);
+        } catch (InvalidUsernameOrPasswordException e) {
+            final InvalidUsernameOrPasswordException.InvalidUsernameOrPasswordExceptionMessage error = new InvalidUsernameOrPasswordException.InvalidUsernameOrPasswordExceptionMessage();
+            error.setMessage("Invalid username or password");
             return new ResponseEntity<Object>(error, HttpStatus.UNAUTHORIZED);
         }
 

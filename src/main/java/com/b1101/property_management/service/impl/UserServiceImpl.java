@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.b1101.property_management.converter.UserConverter;
 import com.b1101.property_management.entity.UserEntity;
+import com.b1101.property_management.exceptions.InvalidUsernameOrPasswordException;
 import com.b1101.property_management.exceptions.UserAlreadyExistException;
 import com.b1101.property_management.model.UserDto;
 import com.b1101.property_management.repository.UserRepository;
@@ -43,9 +44,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto login(String username, String password) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'login'");
+    public UserDto login(String username, String password) throws InvalidUsernameOrPasswordException {
+        final UserEntity user = userRepository.findUserByUsernameAndPassword(username, password);
+        if (user == null)
+            throw new InvalidUsernameOrPasswordException();
+        return userConverter.convert(user);
     }
 
 }

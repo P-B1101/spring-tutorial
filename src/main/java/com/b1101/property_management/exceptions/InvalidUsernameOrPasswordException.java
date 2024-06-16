@@ -1,5 +1,12 @@
 package com.b1101.property_management.exceptions;
 
-public class InvalidUsernameOrPasswordException extends Exception {
+import lombok.Getter;
+import lombok.Setter;
 
+public class InvalidUsernameOrPasswordException extends Exception {
+    @Getter
+    @Setter
+    public static class InvalidUsernameOrPasswordExceptionMessage {
+        private String message;
+    }
 }
